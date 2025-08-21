@@ -1,34 +1,42 @@
-import { NextResponse } from 'next/server'
-// The client you created from the Server-Side Auth instructions
-import { createClient } from '@/lib/supabase/server'
+"use client";
 
-export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url)
-  const code = searchParams.get('code')
-  // if "next" is in param, use it as the redirect URL
-  let next = searchParams.get('next') ?? '/'
-  if (!next.startsWith('/')) {
-    // if "next" is not a relative URL, use the default
-    next = '/'
-  }
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
-  if (code) {
-    const supabase = await createClient()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
-      const isLocalEnv = process.env.NODE_ENV === 'development'
-      if (isLocalEnv) {
-        // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-        return NextResponse.redirect(`${origin}${next}`)
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`)
-      } else {
-        return NextResponse.redirect(`${origin}${next}`)
+export default function AuthCallback() {
+  const router = useRouter();
+  const supabase = createClient();
+
+  useEffect(() => {
+    const handleAuth = async () => {
+      const { data, error } = await supabase.auth.getSession();
+
+      if (error) {
+        console.error("Auth error:", error.message);
+        router.push("/login");
+        return;
       }
-    }
-  }
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+      if (data?.session) {
+        console.log("✅ Logged in!", data.session);
+        router.push("/protected");
+      } else {
+        // If no session yet, let Supabase handle PKCE exchange
+        const { error } = await supabase.auth.exchangeCodeForSession(window.location.href);
+
+        if (error) {
+          console.error("Auth error:", error.message);
+          router.push("/login");
+          return;
+        }
+
+        router.push("/protected");
+      }
+    };
+
+    handleAuth();
+  }, [router, supabase]);
+
+  return <p>Finishing login, please wait...</p>;
 }
