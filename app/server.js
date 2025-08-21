@@ -1,5 +1,5 @@
 // This is your test secret API key.
-const stripe = require('stripe')('sk_test_51RrDUTHRSrsys7NMccC4dtxOeuUvyIQvS3tABEIePDnummfHwhQ7m40Aa7h6eQyzsmpDFcji2OC6CbUGCPk5ehmK00ZYXXwStp');
+/*const stripe = require('stripe')('sk_test_51RrDUTHRSrsys7NMccC4dtxOeuUvyIQvS3tABEIePDnummfHwhQ7m40Aa7h6eQyzsmpDFcji2OC6CbUGCPk5ehmK00ZYXXwStp');
 const express = require('express');
 const app = express();
 app.use(express.static('public'));
@@ -24,3 +24,4 @@ app.post('/create-checkout-session', async (req, res) => {
 });
 
 app.listen(4242, () => console.log('Running on port 4242'));
+*/
