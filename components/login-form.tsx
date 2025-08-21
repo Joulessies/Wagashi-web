@@ -52,7 +52,7 @@ export function LoginForm({
   
 
   return (
-    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ""}>
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
