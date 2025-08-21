@@ -1,15 +1,15 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+/*import { useRouter } from "next/navigation";*/
 import Image from "next/image";
 
 export default function SignInWithGoogle() {
   const supabase = createClient();
-  const router = useRouter();
+  /*const router = useRouter();*/
 
   const handleGoogleSignIn = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { /*data*/, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`, // where user returns after login
