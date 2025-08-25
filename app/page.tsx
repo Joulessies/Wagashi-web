@@ -1,7 +1,6 @@
 import { Hero } from "@/components/hero";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import Navbar from "@/components/navbar";
-import Cart from "@/components/cart";
 import Modal from "@/components/modal";
 export default function Home() {
   return (
