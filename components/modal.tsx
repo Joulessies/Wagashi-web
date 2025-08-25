@@ -3,7 +3,7 @@
 export default function Modal(){
     return (
         <>{/* You can open the modal using document.getElementById('ID').showModal() method */}
-<button className="btn" onClick={()=>document.getElementById('my_modal_3').showModal()}>open modal</button>
+<button className="btn" onClick={()=>(document.getElementById('my_modal_3') as HTMLDialogElement).showModal() }>open modal</button>
 <dialog id="my_modal_3" className="modal">
   <div className="bg-white text-black modal-box h-2/4 w-11/12 max-w-5xl">
     <form method="dialog">
