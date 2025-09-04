@@ -3,15 +3,15 @@
 export default function Modal(){
     return (
         <>{/* You can open the modal using document.getElementById('ID').showModal() method */}
-<button className="btn" onClick={()=>document.getElementById('my_modal_3').showModal()}>open modal</button>
+<button className="btn" onClick={()=>(document.getElementById('my_modal_3') as HTMLDialogElement).showModal() }>open modal</button>
 <dialog id="my_modal_3" className="modal">
-  <div className="bg-white text-black modal-box h-2/4 w-11/12 max-w-5xl">
+  <div className="bg-white text-black modal-box h-2/4 w-10/12 max-w-4xl">
     <form method="dialog">
       {/* if there is a button in form, it will close the modal */}
       <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
     </form>
     <h3 className="font-bold text-lg">Product Details</h3>
-    <div className="grid grid-row-4 grid-cols-2 gap-4">
+    <div className="grid grid-row-4 grid-cols-2 gap-3">
 
         <div className="bg-gray-200 skeleton h-100 w-full"></div>
        

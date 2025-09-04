@@ -20,7 +20,7 @@ export default function AuthCallback() {
 
       if (data?.session) {
         console.log("✅ Logged in!", data.session);
-        router.push("/protected");
+        router.push("/");
       } else {
         // If no session yet, let Supabase handle PKCE exchange
         const { error } = await supabase.auth.exchangeCodeForSession(window.location.href);
@@ -31,7 +31,7 @@ export default function AuthCallback() {
           return;
         }
 
-        router.push("/protected");
+        router.push("/");
       }
     };
 
