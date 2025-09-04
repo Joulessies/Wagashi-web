@@ -1,8 +1,8 @@
 import { Hero } from "@/components/hero";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import Modal from "@/components/modal";
 import Catgeory from "@/components/category";
 import Navbar from "@/components/navbar";
+import Modal from "@/components/modal";
 export default function Home() {
 
   return (
