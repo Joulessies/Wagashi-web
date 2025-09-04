@@ -6,6 +6,30 @@ import { createClient } from "@/lib/supabase/client";
 import { Yuji_Boku } from "next/font/google";
 import { ShoppingBag } from "lucide-react";
 
+// --- Types for database ---
+type Product = {
+  product_id: number;
+  product_name: string;
+  product_price: number;
+  product_img: string | null;
+  product_desc: string | null;
+  product_category: string | null;
+  product_subcategory: string | null;
+  product_jp: string | null;
+};
+
+type Category = {
+  cat_id: string;
+  cat_name: string;
+  cat_jp: string | null;
+};
+
+type SubCategory = {
+  subc_id: string;
+  subc_name: string;
+  subc_jp: string | null;
+};
+
 const yuji = Yuji_Boku({
   weight: "400",
   subsets: ["latin"],
@@ -14,21 +38,19 @@ const yuji = Yuji_Boku({
 export default function ProductCard() {
   const supabase = createClient();
 
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Data
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [subcategories, setSubcategories] = useState<SubCategory[]>([]);
 
   // Filters
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [subcategory, setSubcategory] = useState("all");
 
-  // Dropdown data
-  const [categories, setCategories] = useState<any[]>([]);
-  const [subcategories, setSubcategories] = useState<any[]>([]);
-
   // Pagination
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(8);
+  const pageSize = 8;
   const [totalCount, setTotalCount] = useState(0);
 
   // Load categories + subcategories
@@ -36,17 +58,15 @@ export default function ProductCard() {
     const fetchFilters = async () => {
       const { data: cats } = await supabase.from("category").select("*");
       const { data: subs } = await supabase.from("sub_category").select("*");
-      setCategories(cats || []);
-      setSubcategories(subs || []);
+      setCategories(cats ?? []);
+      setSubcategories(subs ?? []);
     };
     fetchFilters();
-  }, []);
+  }, [supabase]);
 
   // Fetch products with filters + pagination
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true);
-
       let query = supabase
         .from("products")
         .select("*", { count: "exact" })
@@ -64,17 +84,16 @@ export default function ProductCard() {
 
       const { data, error, count } = await query;
 
-      if (error) console.error(error);
-      else {
-        setProducts(data || []);
-        setTotalCount(count || 0);
+      if (error) {
+        console.error(error);
+      } else {
+        setProducts(data as Product[] ?? []);
+        setTotalCount(count ?? 0);
       }
-
-      setLoading(false);
     };
 
     fetchProducts();
-  }, [page, search, category, subcategory]);
+  }, [page, search, category, subcategory, pageSize, supabase]);
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
