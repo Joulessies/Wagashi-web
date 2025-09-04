@@ -1,8 +1,6 @@
 
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import Navbar from "@/components/navbar";
 
-import Modal from "@/components/modal";
 import ProductCard from "@/components/productCard";
 export default function Home() {
   return (
