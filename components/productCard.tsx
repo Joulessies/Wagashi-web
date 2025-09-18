@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Yuji_Boku } from "next/font/google";
 import { ShoppingBag } from "lucide-react";
+import { useCart } from "@/app/context/cartcontext";
 
 // --- Types for database ---
 type Product = {
@@ -15,13 +16,7 @@ type Product = {
   product_desc: string | null;
   product_category: string | null;
   product_subcategory: string | null;
-  product_jp: string | null;
-};
-
-type Category = {
-  cat_id: string;
-  cat_name: string;
-  cat_jp: string | null;
+  product_jp: string;
 };
 
 type SubCategory = {
@@ -37,15 +32,14 @@ const yuji = Yuji_Boku({
 
 export default function ProductCard() {
   const supabase = createClient();
+  const { addToCart } = useCart();
 
   // Data
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<SubCategory[]>([]);
 
   // Filters
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("all");
   const [subcategory, setSubcategory] = useState("all");
 
   // Pagination
@@ -56,9 +50,7 @@ export default function ProductCard() {
   // Load categories + subcategories
   useEffect(() => {
     const fetchFilters = async () => {
-      const { data: cats } = await supabase.from("category").select("*");
       const { data: subs } = await supabase.from("sub_category").select("*");
-      setCategories(cats ?? []);
       setSubcategories(subs ?? []);
     };
     fetchFilters();
@@ -75,9 +67,6 @@ export default function ProductCard() {
       if (search) {
         query = query.ilike("product_name", `%${search}%`);
       }
-      if (category !== "all") {
-        query = query.eq("product_category", category);
-      }
       if (subcategory !== "all") {
         query = query.eq("product_subcategory", subcategory);
       }
@@ -87,20 +76,20 @@ export default function ProductCard() {
       if (error) {
         console.error(error);
       } else {
-        setProducts(data as Product[] ?? []);
+        setProducts((data as Product[]) ?? []);
         setTotalCount(count ?? 0);
       }
     };
 
     fetchProducts();
-  }, [page, search, category, subcategory, pageSize, supabase]);
+  }, [page, search, subcategory, pageSize, supabase]);
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
     <div className="p-6 w-full overflow-x-hidden">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* LEFT COLUMN - FILTERS */}
+        
         <aside className="md:col-span-1 bg-base-100 shadow-sm rounded-lg p-4 h-fit">
           <h2 className="font-bold text-lg mb-4">Filters</h2>
 
@@ -117,23 +106,6 @@ export default function ProductCard() {
 
           <label className="block text-sm font-medium mb-2">Category</label>
           <select
-            value={category}
-            onChange={(e) => {
-              setCategory(e.target.value);
-              setPage(1);
-            }}
-            className="select select-bordered w-full mb-4"
-          >
-            <option value="all">All Categories</option>
-            {categories.map((cat) => (
-              <option key={cat.cat_id} value={cat.cat_id}>
-                {cat.cat_name}
-              </option>
-            ))}
-          </select>
-
-          <label className="block text-sm font-medium mb-2">Subcategory</label>
-          <select
             value={subcategory}
             onChange={(e) => {
               setSubcategory(e.target.value);
@@ -141,7 +113,7 @@ export default function ProductCard() {
             }}
             className="select select-bordered w-full"
           >
-            <option value="all">All Subcategories</option>
+            <option value="all">All Categories</option>
             {subcategories.map((sub) => (
               <option key={sub.subc_id} value={sub.subc_id}>
                 {sub.subc_name}
@@ -150,9 +122,8 @@ export default function ProductCard() {
           </select>
         </aside>
 
-        {/* RIGHT COLUMN - PRODUCTS */}
+        
         <main className="md:col-span-3">
-          {/* Product grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full overflow-x-hidden">
             {products.map((product) => (
               <div
@@ -161,7 +132,7 @@ export default function ProductCard() {
               >
                 <figure className="relative w-full h-64 overflow-hidden">
                   <Image
-                    src={`/images/products/${product.product_img}`}
+                    src={`/prod/${product.product_img}`}
                     alt={product.product_name}
                     fill
                     className="object-cover w-full h-full"
@@ -180,7 +151,18 @@ export default function ProductCard() {
                   </p>
                   <div className="flex justify-between items-center mt-4">
                     <h1 className="text-2xl">₱ {product.product_price}</h1>
-                    <button className="btn btn-primary">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() =>
+                        addToCart({
+                          product_id: product.product_id,
+                          product_name: product.product_name,
+                          product_price: product.product_price,
+                          product_img: product.product_img,
+                          product_jp: product.product_jp
+                        })
+                      }
+                    >
                       <ShoppingBag />
                       Add to Cart
                     </button>
@@ -190,7 +172,7 @@ export default function ProductCard() {
             ))}
           </div>
 
-          {/* Pagination */}
+          
           {totalPages > 1 && (
             <div className="flex justify-center items-center mt-6 gap-2">
               <button

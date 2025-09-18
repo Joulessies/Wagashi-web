@@ -4,6 +4,7 @@ import Catgeory from "@/components/category";
 import Navbar from "@/components/navbar";
 import Modal from "@/components/modal";
 export default function Home() {
+  
 
   return (
     <main className="min-h-screen flex flex-col items-center">
