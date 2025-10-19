@@ -1,7 +1,8 @@
+// tailwind.config.ts
 import type { Config } from "tailwindcss";
 
-export default {
-  darkMode: ["class"],
+const config: Config = {
+  darkMode: ["class"], // ensure class-based dark mode for next-themes
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -59,6 +60,14 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"),require("daisyui")],
-  
-} satisfies Config;
+  plugins: [
+    require("tailwindcss-animate"),
+    require("daisyui"),
+  ],
+  daisyui: {
+    themes: ["light", "dark"], // Add more if desired
+    darkTheme: "dark",
+  },
+};
+
+export default config;

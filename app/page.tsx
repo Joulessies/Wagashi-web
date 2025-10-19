@@ -1,8 +1,9 @@
 import { Hero } from "@/components/hero";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import Catgeory from "@/components/category";
 import Navbar from "@/components/navbar";
-import Modal from "@/components/modal";
+import { Footer } from "@/components/footer";
+import { Gallery } from "@/components/gallery";
+import { Category } from "@/components/category";
+import { About } from "@/components/about-us";
 export default function Home() {
   
 
@@ -10,29 +11,13 @@ export default function Home() {
     <main className="min-h-screen flex flex-col items-center">
       <div className="flex-1 w-full flex flex-col gap-20 items-center">
          <Navbar/>
-        <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
+        <div className="flex-1 flex flex-col max-w-6xl">
           <Hero />
-        </div>
-        <Catgeory/>
-            <form action="/create-checkout-session" method="POST">
-              <button type="submit">Checkout</button>
-            </form> 
-            <Modal/>
-  
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-          <p>
-            Powered by{" "}
-            <a
-              href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-              target="_blank"
-              className="font-bold hover:underline"
-              rel="noreferrer"
-            >
-              Supabase
-            </a>
-          </p>
-          <ThemeSwitcher />
-        </footer>
+          </div>
+        <Category/>
+        <About/>
+        <Gallery/>
+        <Footer/>
       </div>
     </main>
   );

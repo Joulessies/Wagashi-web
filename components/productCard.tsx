@@ -44,7 +44,7 @@ export default function ProductCard() {
 
   // Pagination
   const [page, setPage] = useState(1);
-  const pageSize = 8;
+  const pageSize = 9;
   const [totalCount, setTotalCount] = useState(0);
 
   // Load categories + subcategories
@@ -90,7 +90,7 @@ export default function ProductCard() {
     <div className="p-6 w-full overflow-x-hidden">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         
-        <aside className="md:col-span-1 bg-base-100 shadow-sm rounded-lg p-4 h-fit">
+        <aside className="md:col-span-1 shadow-sm rounded-lg p-4 h-fit">
           <h2 className="font-bold text-lg mb-4">Filters</h2>
 
           <input
@@ -128,7 +128,7 @@ export default function ProductCard() {
             {products.map((product) => (
               <div
                 key={product.product_id}
-                className="card bg-base-100 rounded-lg shadow-md overflow-hidden flex flex-col"
+                className="card rounded-lg shadow-md overflow-hidden flex flex-col"
               >
                 <figure className="relative w-full h-64 overflow-hidden">
                   <Image
@@ -152,7 +152,7 @@ export default function ProductCard() {
                   <div className="flex justify-between items-center mt-4">
                     <h1 className="text-2xl">₱ {product.product_price}</h1>
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-black"
                       onClick={() =>
                         addToCart({
                           product_id: product.product_id,
