@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Yuji_Boku } from "next/font/google";
-import { ShoppingBag, Eye } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/app/context/cartcontext";
 import { useProductDetails } from "@/app/context/product-details-context";
 import ProductDetailsModal from "./product-details-modal";
@@ -134,7 +134,8 @@ export default function ProductCard() {
             {products.map((product) => (
               <div
                 key={product.product_id}
-                className="card rounded-lg shadow-md overflow-hidden flex flex-col group hover:shadow-lg transition-shadow duration-300"
+                className="card rounded-lg shadow-md overflow-hidden flex flex-col group hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                onClick={() => openProductDetails(product.product_id)}
               >
                 <figure className="relative w-full h-64 overflow-hidden">
                   <Image
@@ -143,23 +144,10 @@ export default function ProductCard() {
                     fill
                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                   />
-                  {/* View Details Button */}
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                    <button
-                      className="btn btn-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      onClick={() => openProductDetails(product.product_id)}
-                    >
-                      <Eye size={16} />
-                      View Details
-                    </button>
-                  </div>
                 </figure>
 
                 <div className="card-body pt-4 px-4 flex flex-col flex-1">
-                  <h2
-                    className="card-title mb-2 text-lg font-semibold cursor-pointer hover:text-primary transition-colors"
-                    onClick={() => openProductDetails(product.product_id)}
-                  >
+                  <h2 className="card-title mb-2 text-lg font-semibold hover:text-primary transition-colors">
                     {product.product_name}
                     <p className={`${yuji.className} pb-1 text-sm`}>
                       {product.product_jp}
@@ -170,28 +158,22 @@ export default function ProductCard() {
                   </p>
                   <div className="flex justify-between items-center mt-4">
                     <h1 className="text-2xl">₱ {product.product_price}</h1>
-                    <div className="flex gap-2">
-                      <button
-                        className="btn btn-outline btn-sm"
-                        onClick={() => openProductDetails(product.product_id)}
-                      >
-                        <Eye size={16} />
-                      </button>
-                      <button
-                        className="btn btn-black btn-sm"
-                        onClick={() =>
-                          addToCart({
-                            product_id: product.product_id,
-                            product_name: product.product_name,
-                            product_price: product.product_price,
-                            product_img: product.product_img,
-                            product_jp: product.product_jp,
-                          })
-                        }
-                      >
-                        <ShoppingBag size={16} />
-                      </button>
-                    </div>
+                    <button
+                      className="btn btn-black"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent opening details modal
+                        addToCart({
+                          product_id: product.product_id,
+                          product_name: product.product_name,
+                          product_price: product.product_price,
+                          product_img: product.product_img,
+                          product_jp: product.product_jp,
+                        });
+                      }}
+                    >
+                      <ShoppingBag />
+                      Add to Cart
+                    </button>
                   </div>
                 </div>
               </div>
