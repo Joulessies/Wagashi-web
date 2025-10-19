@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const PAYMONGO_SECRET_KEY =
-  process.env.PAYMONGO_SECRET_KEY;
+const PAYMONGO_SECRET_KEY = process.env.PAYMONGO_SECRET_KEY;
 
 export async function POST(request: NextRequest) {
   try {
@@ -43,16 +42,24 @@ export async function POST(request: NextRequest) {
       paymentMethodData.billing = billing;
     }
 
-    console.log("Creating PayMongo payment method with data:", paymentMethodData);
+    console.log(
+      "Creating PayMongo payment method with data:",
+      paymentMethodData
+    );
 
-    const response = await fetch("https://api.paymongo.com/v1/payment_methods", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${Buffer.from(PAYMONGO_SECRET_KEY + ":").toString("base64")}`,
-      },
-      body: JSON.stringify({ data: { attributes: paymentMethodData } }),
-    });
+    const response = await fetch(
+      "https://api.paymongo.com/v1/payment_methods",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Basic ${Buffer.from(
+            PAYMONGO_SECRET_KEY + ":"
+          ).toString("base64")}`,
+        },
+        body: JSON.stringify({ data: { attributes: paymentMethodData } }),
+      }
+    );
 
     const result = await response.json();
 
@@ -67,7 +74,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("PayMongo payment method created successfully:", result.data.id);
+    console.log(
+      "PayMongo payment method created successfully:",
+      result.data.id
+    );
 
     return NextResponse.json({
       success: true,

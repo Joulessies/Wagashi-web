@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { CartProvider } from "./context/cartcontext";
+import { ProductDetailsProvider } from "./context/product-details-context";
 import "./globals.css";
 import { DaisyThemeSync } from "@/components/daisyui-sync";
 
@@ -41,7 +42,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <DaisyThemeSync />
-          <CartProvider>{children}</CartProvider>
+          <CartProvider>
+            <ProductDetailsProvider>{children}</ProductDetailsProvider>
+          </CartProvider>
         </ThemeProvider>
       </body>
     </html>
