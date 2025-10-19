@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Yuji_Boku } from "next/font/google";
-import { ShoppingBag, Heart, Star, Minus, Plus, X } from "lucide-react";
+import { ShoppingBag, Star, Minus, Plus, X } from "lucide-react";
 import { useCart } from "@/app/context/cartcontext";
 
 const yuji = Yuji_Boku({
@@ -41,7 +41,6 @@ export default function ProductDetailsModal({
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
 
   // Mock additional images for gallery (in real app, these would come from database)
   const additionalImages = product?.product_img
@@ -253,17 +252,6 @@ export default function ProductDetailsModal({
                   <ShoppingBag size={20} />
                   Add to Cart - ₱
                   {(product.product_price * quantity).toLocaleString()}
-                </button>
-
-                <button
-                  className="btn btn-outline w-full text-lg py-3"
-                  onClick={() => setIsFavorite(!isFavorite)}
-                >
-                  <Heart
-                    size={20}
-                    className={isFavorite ? "fill-red-500 text-red-500" : ""}
-                  />
-                  {isFavorite ? "Added to Favorites" : "Add to Favorites"}
                 </button>
               </div>
 
